@@ -1,46 +1,61 @@
-import { useContext, useEffect, useState } from "react";
+import { useState, useMemo } from "react";
 import type { Todo } from "../types/todo";
-import { dummyData } from "../data/todos";
-import { GlobalContext } from "../context/context";
+import useFetch from "./useFetch";
 
 const useTodos = () => {
-    const contextTodos = useContext(GlobalContext);
-    console.log('contextTodos........', contextTodos);
-    const [todos, setTodos] = useState(() => {
-        const storedTodos: Todo[] = JSON.parse(localStorage.getItem('todos') || "[]");
-        return storedTodos.length > 0 ? storedTodos : dummyData;
-    });
+    const {data, setData, loading, error} = useFetch('https://jsonplaceholder.typicode.com/todos');
 
-    useEffect(() => {
-        localStorage.setItem('todos', JSON.stringify(todos));
-    })
+    const [currentPage, setCurrentPage] = useState(1);
+    const filteredTodos = useMemo(() => {
+        if (data) {
+            return data.filter((todo: Todo) => todo.userId <= 5);
+        }
+    }, [data])
+
+    const paginatedTodos = useMemo(() => {
+        if (filteredTodos) {
+            const recordsPerPage = 10;
+            const lastIndex = currentPage * recordsPerPage;
+            const firstIndex = lastIndex - recordsPerPage;
+            return filteredTodos.slice(firstIndex, lastIndex);
+        }
+    }, [filteredTodos, currentPage])
+    console.log('paginatedTodos', paginatedTodos);
 
     const setTodoCompleted = (id:number, completed: boolean) => {
-        setTodos(prevTodo => 
-        prevTodo.map(todo => todo.id === id ? {...todo, completed} : todo)
-        )
+        if(data){
+            setData(prevTodo => 
+                (prevTodo || []).map(todo => todo.id === id ? {...todo, completed} : todo)
+            )
+        }
     }
     const addTodo = (title: string) => {
-        setTodos(prevTodo => 
-        // prevTodo.push({id: prevTodo.length + 1, title, completed: false });
-        [...prevTodo, {id: prevTodo.length + 1, title, completed: false }]
+        setData(prevTodo => 
+            [{id: (prevTodo || []).length + 1, userId: 5, title, completed: false }, ...(prevTodo || [])]
         )
     }
 
     const deleteTodo = (id: number) => {
-        setTodos(prevTodo => prevTodo.filter(todo => todo.id !== id));
+        setData(prevTodo => (prevTodo || []).filter(todo => todo.id !== id));
     }
 
     const deleteCompletedTodos = () => {
-        setTodos(prevTodo => prevTodo.filter(todo => !todo.completed));
+        setData(prevTodo => (prevTodo || []).filter(todo => !todo.completed));
     }
 
     return {
-        todos,
+        data, 
+        setData,
         addTodo,
         setTodoCompleted,
         deleteTodo,
-        deleteCompletedTodos
+        deleteCompletedTodos,
+        loading,
+        error,
+        currentPage,
+        setCurrentPage,
+        totalPages: filteredTodos ? Math.ceil(filteredTodos.length / 10) : 0,
+        paginatedTodos
     }
 }
 

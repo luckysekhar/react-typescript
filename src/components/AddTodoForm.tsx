@@ -1,24 +1,22 @@
 import { useRef } from "react";
-
 interface AddTodoFormProps {
-    onSubmit: (title: string) => void;
-}
+    onInputChange: (value: string) => void;
+}   
 
-const AddTodoForm = ({onSubmit}: AddTodoFormProps) => {
-    // const [inputVal, setInputVal] = useState('');
-    const inputRef = useRef<HTMLInputElement | null>(null);
-
-    // const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => setInputVal(e.target.value);
+const AddTodoForm: React.FC<AddTodoFormProps> = ({onInputChange}) => {
+    // const [inputValue, setInputValue] = useState("");
+    const inputRef = useRef<HTMLInputElement>(null);
     const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if(!inputRef.current?.value.trim()) return;
-        onSubmit(inputRef.current.value);
-        inputRef.current.value = '';
+        e.preventDefault();     
+        onInputChange(inputRef.current?.value || "");
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
     }
     return (
-        <form className="flex" onSubmit = {handleSubmit}>
-            <input type = 'text' ref = {inputRef} placeholder="What needs to be done..." className="border rounded-s-md p-2 grow"/>
-            <button type = 'submit' className="w-16 rounded-e-md bg-slate-900 text-white hover:bg-slate-600">Add</button>
+        <form onSubmit = {handleSubmit} className = 'flex'>
+            <input type = 'text' id = 'title' name = 'title' ref = {inputRef} placeholder="Add a new todo" className = 'p-2 rounded-s-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent grow' />
+            <button type = 'submit' className = 'bg-blue-500 text-white px-4 py-2 rounded-e-md hover:bg-blue-600'>Add</button>
         </form>
     )
 }

@@ -1,7 +1,7 @@
-import AddTodoForm from "./components/AddTodoForm";
+// import AddTodoForm from "./components/AddTodoForm";
 import TodoList from "./components/TodoList";
-import TodoSummary from "./components/TodoSummary";
-import useTodos from "./customhooks/useTodos";
+// import TodoSummary from "./components/TodoSummary";
+// import useTodos from "./customhooks/useTodos";
 
 function App() {
   // const [todos, setTodos] = useState(() => {
@@ -32,21 +32,22 @@ function App() {
   // const deleteCompletedTodos = () => {
   //   setTodos(prevTodo => prevTodo.filter(todo => !todo.completed));
   // }
-  const {
-    todos,
-    addTodo,
-    setTodoCompleted,
-    deleteTodo,
-    deleteCompletedTodos
-  } = useTodos();
-  console.log('todos........', todos);
+  // const {
+  //   todos,
+  //   addTodo,
+  //   setTodoCompleted,
+  //   deleteTodo,
+  //   deleteCompletedTodos
+  // } = useTodos();
+  // console.log('todos........', todos);
   return (
     <div className = 'py-10 h-screen space-y-6'>
       <h1 className = "font-bold text-3xl text-center">Your Todos</h1>
       <div className="max-w-lg mx-auto space-y-6 bg-red-100 p-4">
-        <AddTodoForm onSubmit = {addTodo}/>
+        <TodoList />
+        {/* <AddTodoForm onSubmit = {addTodo}/>
         <TodoList todos = {todos} onCompletedChange = {setTodoCompleted} onDelete = {deleteTodo} />
-        <TodoSummary todos = {todos} deleteAllCompleted={deleteCompletedTodos} />
+        <TodoSummary todos = {todos} deleteAllCompleted={deleteCompletedTodos} /> */}
       </div>
     </div>
   )

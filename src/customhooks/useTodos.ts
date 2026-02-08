@@ -6,6 +6,7 @@ const useTodos = () => {
     const {data, setData, loading, error} = useFetch('https://jsonplaceholder.typicode.com/todos');
 
     const [currentPage, setCurrentPage] = useState(1);
+    
     const filteredTodos = useMemo(() => {
         if (data) {
             return data.filter((todo: Todo) => todo.userId <= 5);
@@ -30,9 +31,18 @@ const useTodos = () => {
         }
     }
     const addTodo = (title: string) => {
-        setData(prevTodo => 
-            [{id: (prevTodo || []).length + 1, userId: 5, title, completed: false }, ...(prevTodo || [])]
-        )
+        const recordsPerPage = 10;
+        const lastIndex = currentPage * recordsPerPage;
+        const firstIndex = lastIndex - recordsPerPage;
+        const updatedTodos = [
+            ...filteredTodos!.slice(0, firstIndex),
+            {id: (data || []).length + 1, userId: 5, title, completed: false },
+            ...filteredTodos!.slice(firstIndex)
+        ]
+        // setData(prevTodo => 
+            // [{id: (prevTodo || []).length + 1, userId: 5, title, completed: false }, ...(prevTodo || [])]
+        // )
+        setData([...updatedTodos]);
     }
 
     const deleteTodo = (id: number) => {

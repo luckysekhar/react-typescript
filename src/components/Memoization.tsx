@@ -15,6 +15,7 @@ const Memoization = () => {
     const handleBtnClick = () => {
         setCount(count + 1);
         setCount(count + 10);
+        setObj(prevObj => ({...prevObj, name: 'Doe'}));
         // setCount(prevCount => prevCount + 1);
     }
     console.log('count.......', count);

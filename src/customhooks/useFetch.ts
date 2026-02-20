@@ -27,7 +27,7 @@ const useFetch = (url: string) => {
         return () => {
             controller.abort();
         }
-    }, [url])
+    }, [])
 
     return { data, setData, loading, error };
 }

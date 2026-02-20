@@ -2,6 +2,7 @@
 import TodoList from "./components/TodoList";
 // import TodoSummary from "./components/TodoSummary";
 // import useTodos from "./customhooks/useTodos";
+import Memoization from "./components/Memoization";
 
 function App() {
   // const [todos, setTodos] = useState(() => {
@@ -42,13 +43,14 @@ function App() {
   // console.log('todos........', todos);
   return (
     <div className = 'py-10 h-screen space-y-6'>
-      <h1 className = "font-bold text-3xl text-center">Your Todos</h1>
+      {/* <h1 className = "font-bold text-3xl text-center">Your Todos</h1>
       <div className="max-w-lg mx-auto space-y-6 bg-red-100 p-4">
-        <TodoList />
+        <TodoList /> */}
         {/* <AddTodoForm onSubmit = {addTodo}/>
         <TodoList todos = {todos} onCompletedChange = {setTodoCompleted} onDelete = {deleteTodo} />
         <TodoSummary todos = {todos} deleteAllCompleted={deleteCompletedTodos} /> */}
-      </div>
+      {/* </div> */}
+      <Memoization />
     </div>
   )
 }
